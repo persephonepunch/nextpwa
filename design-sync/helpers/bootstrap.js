@@ -101,6 +101,7 @@ async function createPageList(){
 	console.log(`Creating page list from Webflow site...`)
 
 	const sitemapUrl = `${site}/sitemap.xml`
+	// console.log(`sitemapUrl`, sitemapUrl)
 	let sitemapLinks = await getSitemapLinks(sitemapUrl)
 		.catch(err => {
 			console.error(`Error fetching sitemap`, err)
@@ -165,8 +166,11 @@ async function fetchCss($, assetDomains){
 	const $styles = $('link[rel="stylesheet"]')
 	let cssUrl
 	$styles.each((i, el) => {
-		const href = $(el).attr(`href`)
+		let href = $(el).attr(`href`)
 		if(!href) return
+		if(href.indexOf(`//`) === 0){
+			href = `https:${href}`
+		}
 		const parsed = new URL(href)
 		const ext = parsed.pathname.split(`.`).pop()
 		if(assetDomains.indexOf(parsed.host) !== -1 && ext === `css`){
@@ -186,8 +190,11 @@ async function fetchJs($, assetDomains){
 	let jsUrl
 	let jqueryUrl
 	$scripts.each((i, el) => {
-		const src = $(el).attr(`src`)
+		let src = $(el).attr(`src`)
 		if(!src) return
+		if(src.indexOf(`//`) === 0){
+			src = `https:${src}`
+		}
 		const parsed = new URL(src)
 		const ext = parsed.pathname.split(`.`).pop()
 		if(assetDomains.indexOf(parsed.host) !== -1 && ext === `js`){
