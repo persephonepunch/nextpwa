@@ -13,6 +13,7 @@ class MyDocument extends Document {
     return (
       <Html lang='en' {...meta.htmlAttributes}>
         <Head>
+       
           {!!gaId && <>
             <script
               async
